@@ -1,0 +1,18 @@
+.home-layout {
+    margin-left: 12.5%;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    max-width: 75%;
+}
+
+.home-upload {
+    margin-top: 5%;
+    margin-bottom: 50px;
+}
+
+.home-table {
+    border-radius: 25px;
+    background-color: white;
+}
