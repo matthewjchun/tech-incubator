@@ -17,7 +17,13 @@ import {
 
 
 function Home() {
-    const { createIsOpen, createOnOpen, createOnClose } = useDisclosure();
+    // const { createIsOpen, createOnOpen, createOnClose } = useDisclosure();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+
+    // const handleCreateOpen = () => {
+    //     createOnOpen()
+    // }
 
     // fetch the collection data for all of the tasks here, similar to parsume
     // change the text on the button depending on the value of the status parameter: 
@@ -27,11 +33,6 @@ function Home() {
     // Try to figure out a better way to deal with overflow in the description cell
     return (
         <div className="home-layout">
-            <Create
-                isOpen={createIsOpen}
-                onOpen={createOnOpen}
-                onClose={createOnClose}
-            ></Create>
             <Button className='home-upload' colorScheme='blue'>Upload New Assignment</Button>
             <TableContainer className="home-table">
                 <Table variant='striped' colorScheme='teal'>
@@ -49,7 +50,7 @@ function Home() {
                             <Td style={{ maxWidth: "25px" }}>Project #2</Td>
                             <Td>Create a tech incubator webpage</Td>
                             <Td>
-                                <Button colorScheme='blue' onClick={createOnOpen}>Accept</Button>
+                                <Button colorScheme='blue' onClick={onOpen}>Accept</Button>
                             </Td>
                         </Tr>
                         <Tr>
@@ -75,6 +76,14 @@ function Home() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <Create
+                // isOpen={createIsOpen}
+                // onOpen={createOnOpen}
+                // onClose={createOnClose}
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+            ></Create>
         </div>
     );
 }
