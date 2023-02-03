@@ -1,5 +1,4 @@
 import React from 'react';
-import './Submit.css';
 import {
     Modal,
     ModalOverlay,
@@ -18,7 +17,7 @@ import {
 
 
 
-function Submit(props) {
+function Accept(props) {
     const { isOpen, onClose } = props
 
     const initialRef = React.useRef(null)
@@ -65,4 +64,4 @@ function Submit(props) {
     );
 }
 
-export default Submit;
+export default Accept;

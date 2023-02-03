@@ -1,5 +1,4 @@
 import React from 'react';
-import './Create.css';
 import {
     Modal,
     ModalOverlay,
