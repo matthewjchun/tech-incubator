@@ -1,29 +1,33 @@
 import './Home.css';
 import Create from '../Modals/Create'
+import Accept from '../Modals/Accept'
+import Submit from '../Modals/Submit'
 import {
     Button,
-    ButtonGroup,
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    TableCaption,
     TableContainer,
-    useDisclosure,
 } from '@chakra-ui/react'
+import React from 'react';
 
 
 function Home() {
-    // const { createIsOpen, createOnOpen, createOnClose } = useDisclosure();
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isCreateOpen, setIsCreateOpen] = React.useState(false)
+    const [isSubmitOpen, setIsSubmitOpen] = React.useState(false)
+    const [isAcceptOpen, setIsAcceptOpen] = React.useState(false)
 
+    const openCreate = () => setIsCreateOpen(true);
+    const closeCreate = () => setIsCreateOpen(false);
 
-    // const handleCreateOpen = () => {
-    //     createOnOpen()
-    // }
+    const openSubmit = () => setIsSubmitOpen(true);
+    const closeSubmit = () => setIsSubmitOpen(false);
+
+    const openAccept = () => setIsAcceptOpen(true);
+    const closeAccept = () => setIsAcceptOpen(false);
 
     // fetch the collection data for all of the tasks here, similar to parsume
     // change the text on the button depending on the value of the status parameter: 
@@ -31,15 +35,16 @@ function Home() {
     // ^ Probs gonna run into more difficulties later on with this
 
     // Try to figure out a better way to deal with overflow in the description cell
+
     return (
         <div className="home-layout">
-            <Button className='home-upload' colorScheme='blue'>Upload New Assignment</Button>
+            <Button className='home-upload' colorScheme='blue' onClick={openCreate}>Upload New Task</Button>
             <TableContainer className="home-table">
                 <Table variant='striped' colorScheme='teal'>
                     <Thead>
                         <Tr>
                             <Th>Company</Th>
-                            <Th>Assignment Name</Th>
+                            <Th>Task Name</Th>
                             <Th>Description</Th>
                             <Th>Action</Th>
                         </Tr>
@@ -50,7 +55,7 @@ function Home() {
                             <Td style={{ maxWidth: "25px" }}>Project #2</Td>
                             <Td>Create a tech incubator webpage</Td>
                             <Td>
-                                <Button colorScheme='blue' onClick={onOpen}>Accept</Button>
+                                <Button colorScheme='blue' onClick={openAccept}>Accept</Button>
                             </Td>
                         </Tr>
                         <Tr>
@@ -58,11 +63,9 @@ function Home() {
                             <Td style={{ maxWidth: "25px" }}>Hire Matthew Chun</Td>
                             <Td style={{ maxWidth: "100px", overflowX: "auto" }}>
                                 Sit nulla est ex deserunt exercitation anim occaecat. Nostrud ullamco deserunt aute id consequat veniam incididunt duis in sint irure nisi. Mollit officia cillum Lorem ullamco minim nostrud elit officia tempor esse quis.
-
-                                Sunt ad dolore quis aute consequat. Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
                             </Td>
                             <Td>
-                                <Button colorScheme='blue'>Accept</Button>
+                                <Button colorScheme='blue' onClick={openSubmit}>Submit</Button>
                             </Td>
                         </Tr>
                         <Tr>
@@ -77,13 +80,17 @@ function Home() {
                 </Table>
             </TableContainer>
             <Create
-                // isOpen={createIsOpen}
-                // onOpen={createOnOpen}
-                // onClose={createOnClose}
-                isOpen={isOpen}
-                onOpen={onOpen}
-                onClose={onClose}
+                isOpen={isCreateOpen}
+                onClose={closeCreate}
             ></Create>
+            <Accept
+                isOpen={isAcceptOpen}
+                onClose={closeAccept}
+            ></Accept>
+            <Submit
+                isOpen={isSubmitOpen}
+                onClose={closeSubmit}
+            ></Submit>
         </div>
     );
 }

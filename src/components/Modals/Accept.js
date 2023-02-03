@@ -12,7 +12,6 @@ import {
     Input,
     FormControl,
     FormLabel,
-    FormHelperText,
     Divider,
     Heading,
 } from '@chakra-ui/react'
@@ -34,7 +33,7 @@ function Submit(props) {
             <ModalContent>
                 <ModalHeader>
                     <Heading size='lg'>
-                    Submit your Assignment
+                    Accept Assignment
                     </Heading>
                 </ModalHeader>
                 <ModalCloseButton />
@@ -50,15 +49,14 @@ function Submit(props) {
                     <p>Create a tech incubator webpage</p>
 
                     <FormControl mt={4}>
-                        <FormLabel>Submission</FormLabel>
-                        <Input ref={initialRef} type='url' placeholder='Submission URL' />
-                        <FormHelperText>Please submit a video or Google Docs url</FormHelperText>
+                        <FormLabel>Estimated Completion Date</FormLabel>
+                        <Input ref={initialRef} placeholder='Completion Date'  type="datetime-local"/>
                     </FormControl>
                 </ModalBody>
 
                 <ModalFooter>
                     <Button colorScheme='blue' mr={3}>
-                        Submit
+                        Accept
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>
                 </ModalFooter>
