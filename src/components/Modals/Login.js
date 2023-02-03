@@ -22,8 +22,6 @@ import {
   
     return (
       <>
-        
-  
         <Modal
           initialFocusRef={initialRef}
           isOpen={true}
