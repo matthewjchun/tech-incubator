@@ -33,13 +33,13 @@ function Create(props) {
                 <ModalCloseButton />
                 <ModalBody pb={6}>
                     <FormControl>
-                        <FormLabel>First name</FormLabel>
-                        <Input ref={initialRef} placeholder='First name' />
+                        <FormLabel>Student ID</FormLabel>
+                        <Input ref={initialRef} placeholder='Student ID' />
                     </FormControl>
 
                     <FormControl mt={4}>
-                        <FormLabel>Last name</FormLabel>
-                        <Input placeholder='Last name' />
+                        <FormLabel>Password</FormLabel>
+                        <Input placeholder='Password' />
                     </FormControl>
                 </ModalBody>
 
