@@ -4,8 +4,8 @@ import Home from './components/Home/Home'
 import Header from './components/Header/Header'
 import Create from './components/Modals/Create'
 import Submit from './components/Modals/Submit'
-import Register from './components/Modals/Register'
-import Login from './components/Modals/Login'
+import Accept from './components/Modals/Accept'
+
 function App() {
   const [ logged, setLogged ] = useState(false) 
   
@@ -13,9 +13,8 @@ function App() {
     <div className="background">
       <Header></Header>
       <Create></Create>
-      <Submit></Submit>
-      {/* <Register></Register> */}
-      {/* <Login></Login> */}
+      {/* <Submit></Submit>
+      <Accept></Accept> */}
       {logged ?
         <p>logged in!</p>
         :
