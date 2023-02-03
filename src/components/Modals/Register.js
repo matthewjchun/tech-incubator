@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 
 function Register(props) {
-  const { isOpen, onOpen, onClose } = props
+  const { isOpen, onClose } = props
 
   const initialRef = React.useRef(null)
 
@@ -25,7 +25,7 @@ function Register(props) {
 
       <Modal
         initialFocusRef={initialRef}
-        isOpen={true}
+        isOpen={isOpen}
         onClose={onClose}
       >
         <ModalOverlay />
