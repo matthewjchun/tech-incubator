@@ -14,7 +14,6 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  Center,
 } from '@chakra-ui/react'
 
 function Register(props) {
@@ -22,7 +21,6 @@ function Register(props) {
   const [accType, setAccType] = React.useState('1')
 
   const initialRef = React.useRef(null)
-
 
   return (
     <>
@@ -42,7 +40,6 @@ function Register(props) {
                 <Radio value='2'>Company</Radio>
               </Stack>
             </RadioGroup>
-
             {accType == '1' ?
               <>
                 <FormControl>
