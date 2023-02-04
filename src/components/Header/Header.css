@@ -13,7 +13,7 @@
     padding-left: 10px;
 }
 
-.Register {
+.header-register {
     font-size: 40px;
     background-color: seagreen;
     padding-left: 1300px;
@@ -22,7 +22,7 @@
     display: inline-block
 }
 
-.Login {
+.header-login {
     font-size: 40px;
     background-color: seagreen;
     padding-top: 20px;

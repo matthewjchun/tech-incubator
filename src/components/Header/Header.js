@@ -6,8 +6,8 @@ import Register from '../Modals/Register'
 import Login from '../Modals/Login'
 
 function Header() {
-  const [isResgisterOpen, setIsRegisterOpen] = React.useState(false)
-  const [isLoginOpen, setIsLoginOpen] = React.useState(false)
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false)
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
 
   const openRegister = () => setIsRegisterOpen(true);
   const closeRegister = () => setIsRegisterOpen(false);
@@ -20,16 +20,16 @@ function Header() {
       <div className="dummy-header">
         <div className='title-container'>
           <div>Techubator</div>
-          <div className='Register'>
+          <div className='header-register'>
             <Button colorScheme='blue' onClick={openRegister}>Register</Button>
           </div>
-          <div className='Login'>
+          <div className='header-login'>
             <Button colorScheme='blue' onClick={openLogin}>Login</Button>
           </div>
         </div>
       </div>
       <Register
-        isOpen={isResgisterOpen}
+        isOpen={isRegisterOpen}
         onClose={closeRegister}
       ></Register>
       <Login
@@ -37,8 +37,6 @@ function Header() {
         onClose={closeLogin}
       ></Login>
     </div>
-
-
   );
 }
 

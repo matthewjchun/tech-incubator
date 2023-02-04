@@ -10,19 +10,20 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Input
+  Input,
+  Radio,
+  RadioGroup,
+  Stack,
 } from '@chakra-ui/react'
 
 function Register(props) {
   const { isOpen, onClose } = props
+  const [accType, setAccType] = React.useState('1')
 
   const initialRef = React.useRef(null)
 
-
   return (
     <>
-
-
       <Modal
         initialFocusRef={initialRef}
         isOpen={isOpen}
@@ -33,26 +34,52 @@ function Register(props) {
           <ModalHeader>Create your account</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>First name</FormLabel>
-              <Input ref={initialRef} placeholder='First name' />
-            </FormControl>
+            <RadioGroup onChange={setAccType} value={accType}>
+              <Stack direction='row'>
+                <Radio value='1'>Student</Radio>
+                <Radio value='2'>Company</Radio>
+              </Stack>
+            </RadioGroup>
+            {accType == '1' ?
+              <>
+                <FormControl>
+                  <FormLabel>First name</FormLabel>
+                  <Input ref={initialRef} placeholder='First name' />
+                </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Last name</FormLabel>
-              <Input placeholder='Last name' />
-            </FormControl>
+                <FormControl mt={4}>
+                  <FormLabel>Last name</FormLabel>
+                  <Input placeholder='Last name' />
+                </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Student ID</FormLabel>
-              <Input placeholder='Student ID' />
-            </FormControl>
+                <FormControl mt={4}>
+                  <FormLabel>Student ID</FormLabel>
+                  <Input placeholder='Student ID' />
+                </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Password</FormLabel>
-              <Input placeholder='Password' />
-            </FormControl>
+                <FormControl mt={4}>
+                  <FormLabel>Password</FormLabel>
+                  <Input placeholder='Password' />
+                </FormControl>
+              </>
+              :
+              <>
+                <FormControl>
+                  <FormLabel>Company name</FormLabel>
+                  <Input ref={initialRef} placeholder='Company name' />
+                </FormControl>
 
+                <FormControl mt={4}>
+                  <FormLabel>Password</FormLabel>
+                  <Input placeholder='Password' />
+                </FormControl>
+
+                <FormControl mt={4}>
+                  <FormLabel>Logo</FormLabel>
+                  <Input placeholder='Logo url' />
+                </FormControl>
+              </>
+            }
           </ModalBody>
 
           <ModalFooter>

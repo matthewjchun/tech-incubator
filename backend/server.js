@@ -14,7 +14,7 @@ const db = new Pool({
 });
 
 app.get("/", (err, res) => {
-    const sqlInsert = "Insert into students(studentid, firstname, lastname, password) VALUES('87654321', 'Stony', 'College', 'queenMain');"
+    const sqlInsert = "Insert into students(studentid, firstname, lastname, password) VALUES('87654329', 'Stony', 'College', 'queenMain');"
     db.query(sqlInsert, (req, result) => {
         res.send("Hello World!");
     })
