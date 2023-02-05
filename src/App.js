@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 import { initializeApp } from "firebase/app";
-import 'firebase/compat/firestore';
-
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import Home from './components/Home/Home'
 import Header from './components/Header/Header'
 
@@ -22,15 +22,21 @@ function App() {
   };
 
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
   return (
     <div className="background">
-      <Header></Header>
+      <Header
+        auth={auth}
+        db={db}
+      ></Header>
       {logged ?
         <p>logged in!</p>
         :
-        <Home></Home>
+        <Home
+          db={db}
+        ></Home>
       }
     </div>
   );

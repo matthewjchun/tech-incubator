@@ -12,29 +12,50 @@ import {
     Td,
     TableContainer,
 } from '@chakra-ui/react'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore'
 
-
-function Home() {
-    const [isCreateOpen, setIsCreateOpen] = React.useState(false)
-    const [isSubmitOpen, setIsSubmitOpen] = React.useState(false)
-    const [isAcceptOpen, setIsAcceptOpen] = React.useState(false)
+function Home(props) {
+    // Creating modal state values
+    const [isCreateOpen, setIsCreateOpen] = useState(false)
+    const [isSubmitOpen, setIsSubmitOpen] = useState(false)
+    const [isAcceptOpen, setIsAcceptOpen] = useState(false)
+    // Initializing database
+    const db = props.db
+    const [data, setData] = useState([])
+    const [task, setTask] = useState({
+        companyName: "dummy",
+        description: "",
+        name: "",
+        studentId: "",
+    })
 
     const openCreate = () => setIsCreateOpen(true);
     const closeCreate = () => setIsCreateOpen(false);
 
-    const openSubmit = () => setIsSubmitOpen(true);
+    const openSubmit = (item) => {
+        setIsSubmitOpen(true);
+        setTask(item)
+    };
     const closeSubmit = () => setIsSubmitOpen(false);
 
-    const openAccept = () => setIsAcceptOpen(true);
+    const openAccept = (item) => {
+        setIsAcceptOpen(true);
+        setTask(item)
+    };
     const closeAccept = () => setIsAcceptOpen(false);
 
-    // fetch the collection data for all of the tasks here, similar to parsume
-    // change the text on the button depending on the value of the status parameter: 
-    // { task.status ? <Button>Accept</> : <Button>Submit</>}
-    // ^ Probs gonna run into more difficulties later on with this
+    useEffect(() => {
+        const fetchData = async () => {
+            const snapshot = await getDocs(collection(db, 'tasks'));
+            const fetchedData = snapshot.docs.map(doc => {
+                return { id: doc.id, ...doc.data() };
+            });
+            setData(fetchedData)
+        }
+        fetchData();
+    }, []);
 
-    // Try to figure out a better way to deal with overflow in the description cell
 
     return (
         <div className="home-layout">
@@ -50,32 +71,20 @@ function Home() {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        <Tr>
-                            <Td>Headstarter</Td>
-                            <Td style={{ maxWidth: "25px" }}>Project #2</Td>
-                            <Td>Create a tech incubator webpage</Td>
-                            <Td>
-                                <Button colorScheme='blue' onClick={openAccept}>Accept</Button>
-                            </Td>
-                        </Tr>
-                        <Tr>
-                            <Td>Google</Td>
-                            <Td style={{ maxWidth: "25px" }}>Hire Matthew Chun</Td>
-                            <Td style={{ maxWidth: "100px", overflowX: "auto" }}>
-                                Sit nulla est ex deserunt exercitation anim occaecat. Nostrud ullamco deserunt aute id consequat veniam incididunt duis in sint irure nisi. Mollit officia cillum Lorem ullamco minim nostrud elit officia tempor esse quis.
-                            </Td>
-                            <Td>
-                                <Button colorScheme='blue' onClick={openSubmit}>Submit</Button>
-                            </Td>
-                        </Tr>
-                        <Tr>
-                            <Td>Twitter</Td>
-                            <Td style={{ maxWidth: "25px" }}>Fire Elon</Td>
-                            <Td>Please help us hire a new CEO for our company</Td>
-                            <Td>
-                                <Button colorScheme='blue'>Accept</Button>
-                            </Td>
-                        </Tr>
+                        {data.map(item => (
+                            <Tr>
+                                <Td style={{ width: "5%" }}>{item.companyName}</Td>
+                                <Td style={{ width: "10%" }}>{item.name}</Td>
+                                <Td style={{ width: "70%", overflowX: "auto" }}>{item.description}</Td>
+                                <Td key={item} style={{ width: "15%" }}>
+                                    {item.studentId ?
+                                        <Button colorScheme='blue' onClick={() => openSubmit(item)}>Submit</Button>
+                                        :
+                                        <Button colorScheme='blue' onClick={() => openAccept(item)}>Accept</Button>
+                                    }
+                                </Td>
+                            </Tr>
+                        ))}
                     </Tbody>
                 </Table>
             </TableContainer>
@@ -86,10 +95,12 @@ function Home() {
             <Accept
                 isOpen={isAcceptOpen}
                 onClose={closeAccept}
+                item={task}
             ></Accept>
             <Submit
                 isOpen={isSubmitOpen}
                 onClose={closeSubmit}
+                item={task}
             ></Submit>
         </div>
     );

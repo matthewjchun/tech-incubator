@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -19,6 +19,7 @@ import {
 
 function Accept(props) {
     const { isOpen, onClose } = props
+    const item = props.item
 
     const initialRef = React.useRef(null)
 
@@ -39,13 +40,13 @@ function Accept(props) {
                 <ModalBody pb={6}>
                     <Heading size='md'>Company</Heading>
                     <Divider variant="thick"/>
-                    <p>Headstarter</p>
+                    <p>{item.companyName}</p>
                     <Heading size='sm'>Assignment Task</Heading>
                     <Divider />
-                    <p>Project #2</p>
+                    <p>{item.name}</p>
                     <Heading size='sm'>Description</Heading>
                     <Divider />
-                    <p>Create a tech incubator webpage</p>
+                    <p>{item.description}</p>
 
                     <FormControl mt={4}>
                         <FormLabel>Estimated Completion Date</FormLabel>

@@ -20,6 +20,7 @@ import {
 
 function Submit(props) {
     const { isOpen, onClose } = props
+    const item = props.item
 
     const initialRef = React.useRef(null)
 
@@ -40,13 +41,13 @@ function Submit(props) {
                 <ModalBody pb={6}>
                     <Heading size='md'>Company</Heading>
                     <Divider variant="thick"/>
-                    <p>Headstarter</p>
+                    <p>{item.companyName}</p>
                     <Heading size='sm'>Assignment Task</Heading>
                     <Divider />
-                    <p>Project #2</p>
+                    <p>{item.name}</p>
                     <Heading size='sm'>Description</Heading>
                     <Divider />
-                    <p>Create a tech incubator webpage</p>
+                    <p>{item.description}</p>
 
                     <FormControl mt={4}>
                         <FormLabel>Submission</FormLabel>
