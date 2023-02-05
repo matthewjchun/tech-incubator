@@ -31,8 +31,11 @@ function Create(props) {
         var taskData = {
             companyName: "Google",
             description: desc,
+            email: "",
+            estDate: "",
             name: name,
-            studentId: "",
+            status: "incomplete",
+            submission: "",
         }
 
         const newDoc = await addDoc(collection(db, "tasks"), taskData);

@@ -22,10 +22,10 @@ import { TaskDataContext } from '../../contexts/TaskData';
 function Accept(props) {
     const { isOpen, onClose, db } = props
     const item = props.item
-    const [ taskData, setTaskData ] = useContext(TaskDataContext)
 
     const [user, setUser] = useState("matthewchun.18@gmail.com")
     const [estDate, setEstDate] = useState("")
+    const [ taskData, setTaskData ] = useContext(TaskDataContext)
 
     const initialRef = React.useRef(null)
 
