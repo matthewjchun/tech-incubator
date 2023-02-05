@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -14,14 +14,44 @@ import {
     Divider,
     Heading,
 } from '@chakra-ui/react'
+import { doc, getDocs, setDoc, collection } from "firebase/firestore";
+import { TaskDataContext } from '../../contexts/TaskData';
 
 
 
 function Accept(props) {
-    const { isOpen, onClose } = props
+    const { isOpen, onClose, db } = props
     const item = props.item
+    const [ taskData, setTaskData ] = useContext(TaskDataContext)
+
+    const [user, setUser] = useState("matthewchun.18@gmail.com")
+    const [estDate, setEstDate] = useState("")
 
     const initialRef = React.useRef(null)
+
+    const handleAcceptTask = async () => {
+        var taskData = {
+            companyName: item.companyName,
+            description: item.description,
+            email: user,
+            estDate: estDate,
+            name: item.name,
+            status: item.status,
+            submission: item.submission
+        }
+
+        await setDoc(doc(db, "tasks", item.id), taskData)
+        fetchData()
+        onClose()
+    }
+
+    const fetchData = async () => {
+        const snapshot = await getDocs(collection(db, 'tasks'));
+        const fetchedData = snapshot.docs.map(doc => {
+            return { id: doc.id, ...doc.data() };
+        });
+        setTaskData(fetchedData)
+    }
 
     return (
         <Modal
@@ -50,12 +80,12 @@ function Accept(props) {
 
                     <FormControl mt={4}>
                         <FormLabel>Estimated Completion Date</FormLabel>
-                        <Input ref={initialRef} placeholder='Completion Date'  type="datetime-local"/>
+                        <Input ref={initialRef} placeholder='Completion Date'  type="datetime-local" value={estDate} onChange={e => setEstDate(e.target.value)}/>
                     </FormControl>
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='blue' mr={3}>
+                    <Button colorScheme='blue' mr={3} onClick={handleAcceptTask}>
                         Accept
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>

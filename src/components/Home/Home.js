@@ -29,24 +29,28 @@ function Home(props) {
     const db = props.db
     const [taskData, setTaskData] = useContext(TaskDataContext)
     const [task, setTask] = useState({
-        companyName: "dummy",
+        id: "",
+        companyName: "",
         description: "",
+        email: "",
+        estDate: "",
         name: "",
-        studentId: "",
+        status: "",
+        submission: ""
     })
 
     const openCreate = () => setIsCreateOpen(true);
     const closeCreate = () => setIsCreateOpen(false);
 
     const openSubmit = (item) => {
-        setIsSubmitOpen(true);
         setTask(item)
+        setIsSubmitOpen(true);
     };
     const closeSubmit = () => setIsSubmitOpen(false);
 
     const openAccept = (item) => {
-        setIsAcceptOpen(true);
         setTask(item)
+        setIsAcceptOpen(true);
     };
     const closeAccept = () => setIsAcceptOpen(false);
 
@@ -76,17 +80,31 @@ function Home(props) {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {taskData.map(item => (
+                        {taskData.filter((item) => {
+                            if (item.status != "completed" && item.email == user) {
+                                return item
+                            }
+                        }).map(item => (
                             <Tr>
                                 <Td style={{ width: "5%" }}>{item.companyName}</Td>
                                 <Td style={{ width: "10%" }}>{item.name}</Td>
                                 <Td style={{ width: "70%", overflowX: "auto" }}>{item.description}</Td>
                                 <Td key={item} style={{ width: "15%" }}>
-                                    {item.studentId ?
-                                        <Button colorScheme='blue' onClick={() => openSubmit(item)}>Submit</Button>
-                                        :
-                                        <Button colorScheme='blue' onClick={() => openAccept(item)}>Accept</Button>
-                                    }
+                                    <Button colorScheme='blue' onClick={() => openSubmit(item)}>Submit</Button>
+                                </Td>
+                            </Tr>
+                        ))}
+                        {taskData.filter((item) => {
+                            if (item.status != "completed" && item.email != user) {
+                                return item
+                            }
+                        }).map(item => (
+                            <Tr>
+                                <Td style={{ width: "5%" }}>{item.companyName}</Td>
+                                <Td style={{ width: "10%" }}>{item.name}</Td>
+                                <Td style={{ width: "70%", overflowX: "auto" }}>{item.description}</Td>
+                                <Td key={item} style={{ width: "15%" }}>
+                                    <Button colorScheme='blue' onClick={() => openAccept(item)}>Accept</Button>
                                 </Td>
                             </Tr>
                         ))}
@@ -102,11 +120,13 @@ function Home(props) {
                 isOpen={isAcceptOpen}
                 onClose={closeAccept}
                 item={task}
+                db={db}
             ></Accept>
             <Submit
                 isOpen={isSubmitOpen}
                 onClose={closeSubmit}
                 item={task}
+                db={db}
             ></Submit>
         </div>
     );
