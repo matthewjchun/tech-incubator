@@ -12,17 +12,22 @@ import {
     Td,
     TableContainer,
 } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore'
+import { TaskDataContext } from '../../contexts/TaskData';
 
 function Home(props) {
     // Creating modal state values
     const [isCreateOpen, setIsCreateOpen] = useState(false)
     const [isSubmitOpen, setIsSubmitOpen] = useState(false)
     const [isAcceptOpen, setIsAcceptOpen] = useState(false)
-    // Initializing database
+
+    // dummy hard code
+    const [user, setUser] = useState("matthewchun.18@gmail.com")
+
+    // Initializing database and data states
     const db = props.db
-    const [data, setData] = useState([])
+    const [taskData, setTaskData] = useContext(TaskDataContext)
     const [task, setTask] = useState({
         companyName: "dummy",
         description: "",
@@ -51,7 +56,7 @@ function Home(props) {
             const fetchedData = snapshot.docs.map(doc => {
                 return { id: doc.id, ...doc.data() };
             });
-            setData(fetchedData)
+            setTaskData(fetchedData)
         }
         fetchData();
     }, []);
@@ -71,7 +76,7 @@ function Home(props) {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {data.map(item => (
+                        {taskData.map(item => (
                             <Tr>
                                 <Td style={{ width: "5%" }}>{item.companyName}</Td>
                                 <Td style={{ width: "10%" }}>{item.name}</Td>
@@ -91,6 +96,7 @@ function Home(props) {
             <Create
                 isOpen={isCreateOpen}
                 onClose={closeCreate}
+                db={db}
             ></Create>
             <Accept
                 isOpen={isAcceptOpen}
