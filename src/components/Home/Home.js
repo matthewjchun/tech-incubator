@@ -15,6 +15,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore'
 import { TaskDataContext } from '../../contexts/TaskData';
+import { UserContext } from '../../contexts/User';
 
 function Home(props) {
     // Creating modal state values
@@ -22,8 +23,7 @@ function Home(props) {
     const [isSubmitOpen, setIsSubmitOpen] = useState(false)
     const [isAcceptOpen, setIsAcceptOpen] = useState(false)
 
-    // dummy hard code
-    const [user, setUser] = useState("matthewchun.18@gmail.com")
+    const [user, setUser] = useContext(UserContext)
 
     // Initializing database and data states
     const db = props.db
@@ -81,7 +81,7 @@ function Home(props) {
                     </Thead>
                     <Tbody>
                         {taskData.filter((item) => {
-                            if (item.status != "completed" && item.email == user) {
+                            if (item.status != "completed" && item.email == user.email) {
                                 return item
                             }
                         }).map(item => (
@@ -90,12 +90,12 @@ function Home(props) {
                                 <Td style={{ width: "10%" }}>{item.name}</Td>
                                 <Td style={{ width: "70%", overflowX: "auto" }}>{item.description}</Td>
                                 <Td key={item} style={{ width: "15%" }}>
-                                    <Button colorScheme='blue' onClick={() => openSubmit(item)}>Submit</Button>
+                                    <Button colorScheme='green' onClick={() => openSubmit(item)}>Submit</Button>
                                 </Td>
                             </Tr>
                         ))}
                         {taskData.filter((item) => {
-                            if (item.status != "completed" && item.email != user) {
+                            if (item.status != "completed" && item.email == "") {
                                 return item
                             }
                         }).map(item => (

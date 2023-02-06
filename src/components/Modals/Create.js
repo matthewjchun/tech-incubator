@@ -23,6 +23,7 @@ function Create(props) {
     const { isOpen, onClose, db } = props
     // Use context in order to force table to rerender upon writing to database
     const [ taskData, setTaskData ] = useContext(TaskDataContext)
+
     // create state variables for the task information
     const [name, setName] = useState("")
     const [desc, setDesc] = useState("")

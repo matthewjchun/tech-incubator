@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import './App.css';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import Home from './components/Home/Home'
 import Header from './components/Header/Header'
+import { UserContext } from './contexts/User';
 
 
 
 function App() {
-  const [ logged, setLogged ] = useState(false) 
-  
+  const [user, setUser] = useContext(UserContext)
+
   const firebaseConfig = {
     apiKey: "AIzaSyBRtmfr_5Z5XkfvuPltYw-40o0LphTk6fU",
     authDomain: "techubator-483e4.firebaseapp.com",
@@ -31,12 +32,12 @@ function App() {
         auth={auth}
         db={db}
       ></Header>
-      {logged ?
-        <p>logged in!</p>
-        :
+      {user ?
         <Home
           db={db}
         ></Home>
+        :
+        null
       }
     </div>
   );

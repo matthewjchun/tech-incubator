@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { doc, getDocs, setDoc, collection } from "firebase/firestore";
 import { TaskDataContext } from '../../contexts/TaskData';
+import { UserContext } from '../../contexts/User';
 
 
 
@@ -23,9 +24,9 @@ function Accept(props) {
     const { isOpen, onClose, db } = props
     const item = props.item
 
-    const [user, setUser] = useState("matthewchun.18@gmail.com")
     const [estDate, setEstDate] = useState("")
     const [ taskData, setTaskData ] = useContext(TaskDataContext)
+    const [ user, setUser ] = useContext(UserContext)
 
     const initialRef = React.useRef(null)
 
@@ -33,10 +34,10 @@ function Accept(props) {
         var taskData = {
             companyName: item.companyName,
             description: item.description,
-            email: user,
+            email: user.email,
             estDate: estDate,
             name: item.name,
-            status: item.status,
+            status: "in progress",
             submission: item.submission
         }
 

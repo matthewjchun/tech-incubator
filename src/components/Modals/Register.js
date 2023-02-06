@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -15,12 +15,24 @@ import {
   RadioGroup,
   Stack,
 } from '@chakra-ui/react'
+import { createUserWithEmailAndPassword } from '@firebase/auth'
+import { UserContext } from '../../contexts/User'
 
 function Register(props) {
-  const { isOpen, onClose } = props
-  const [accType, setAccType] = React.useState('1')
+  const { isOpen, onClose, auth } = props
+  const [accType, setAccType] = useState('1')
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [ user, setUser ] = useContext(UserContext)
 
   const initialRef = React.useRef(null)
+  
+  const registerAcc = async () => {
+    await createUserWithEmailAndPassword(auth, email, password)
+    setUser(auth.currentUser)
+    onClose()
+  }
+
 
   return (
     <>
@@ -42,7 +54,7 @@ function Register(props) {
             </RadioGroup>
             {accType == '1' ?
               <>
-                <FormControl>
+                {/* <FormControl>
                   <FormLabel>First name</FormLabel>
                   <Input ref={initialRef} placeholder='First name' />
                 </FormControl>
@@ -50,16 +62,16 @@ function Register(props) {
                 <FormControl mt={4}>
                   <FormLabel>Last name</FormLabel>
                   <Input placeholder='Last name' />
-                </FormControl>
+                </FormControl> */}
 
                 <FormControl mt={4}>
-                  <FormLabel>Student ID</FormLabel>
-                  <Input placeholder='Student ID' />
+                  <FormLabel>Email</FormLabel>
+                  <Input placeholder='Email' value={email} onChange={e => setEmail(e.target.value)}/>
                 </FormControl>
 
                 <FormControl mt={4}>
                   <FormLabel>Password</FormLabel>
-                  <Input placeholder='Password' />
+                  <Input type="password" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)}/>
                 </FormControl>
               </>
               :
@@ -70,8 +82,13 @@ function Register(props) {
                 </FormControl>
 
                 <FormControl mt={4}>
+                  <FormLabel>Email</FormLabel>
+                  <Input placeholder='Email' value={email} onChange={e => setEmail(e.target.value)}/>
+                </FormControl>
+
+                <FormControl mt={4}>
                   <FormLabel>Password</FormLabel>
-                  <Input placeholder='Password' />
+                  <Input type="password" placeholder='Password' />
                 </FormControl>
 
                 <FormControl mt={4}>
@@ -83,8 +100,8 @@ function Register(props) {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3}>
-              Save
+            <Button colorScheme='blue' mr={3} onClick={registerAcc}>
+              Register
             </Button>
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>

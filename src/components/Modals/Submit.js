@@ -18,7 +18,6 @@ import {
 import { doc, getDocs, setDoc, collection } from "firebase/firestore";
 import { TaskDataContext } from '../../contexts/TaskData';
 
-
 function Submit(props) {
     const { isOpen, onClose, db, item } = props
 
