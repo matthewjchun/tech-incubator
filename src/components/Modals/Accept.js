@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -14,13 +14,45 @@ import {
     Divider,
     Heading,
 } from '@chakra-ui/react'
+import { doc, getDocs, setDoc, collection } from "firebase/firestore";
+import { TaskDataContext } from '../../contexts/TaskData';
+import { UserContext } from '../../contexts/User';
 
 
 
 function Accept(props) {
-    const { isOpen, onClose } = props
+    const { isOpen, onClose, db } = props
+    const item = props.item
+
+    const [estDate, setEstDate] = useState("")
+    const [ taskData, setTaskData ] = useContext(TaskDataContext)
+    const [ user, setUser ] = useContext(UserContext)
 
     const initialRef = React.useRef(null)
+
+    const handleAcceptTask = async () => {
+        var taskData = {
+            companyName: item.companyName,
+            description: item.description,
+            email: user.email,
+            estDate: estDate,
+            name: item.name,
+            status: "in progress",
+            submission: item.submission
+        }
+
+        await setDoc(doc(db, "tasks", item.id), taskData)
+        fetchData()
+        onClose()
+    }
+
+    const fetchData = async () => {
+        const snapshot = await getDocs(collection(db, 'tasks'));
+        const fetchedData = snapshot.docs.map(doc => {
+            return { id: doc.id, ...doc.data() };
+        });
+        setTaskData(fetchedData)
+    }
 
     return (
         <Modal
@@ -39,22 +71,22 @@ function Accept(props) {
                 <ModalBody pb={6}>
                     <Heading size='md'>Company</Heading>
                     <Divider variant="thick"/>
-                    <p>Headstarter</p>
+                    <p>{item.companyName}</p>
                     <Heading size='sm'>Assignment Task</Heading>
                     <Divider />
-                    <p>Project #2</p>
+                    <p>{item.name}</p>
                     <Heading size='sm'>Description</Heading>
                     <Divider />
-                    <p>Create a tech incubator webpage</p>
+                    <p>{item.description}</p>
 
                     <FormControl mt={4}>
                         <FormLabel>Estimated Completion Date</FormLabel>
-                        <Input ref={initialRef} placeholder='Completion Date'  type="datetime-local"/>
+                        <Input ref={initialRef} placeholder='Completion Date'  type="datetime-local" value={estDate} onChange={e => setEstDate(e.target.value)}/>
                     </FormControl>
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='blue' mr={3}>
+                    <Button colorScheme='blue' mr={3} onClick={handleAcceptTask}>
                         Accept
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>

@@ -2,6 +2,7 @@ import './Home.css';
 import Create from '../Modals/Create'
 import Accept from '../Modals/Accept'
 import Submit from '../Modals/Submit'
+import Display from '../Modals/Display'
 import {
     Button,
     Table,
@@ -12,33 +13,78 @@ import {
     Td,
     TableContainer,
 } from '@chakra-ui/react'
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore'
+import { TaskDataContext } from '../../contexts/TaskData';
+import { UserContext } from '../../contexts/User';
+import { CompanyContext } from '../../contexts/Company';
 
+function Home(props) {
+    // Creating modal state values
+    const [isCreateOpen, setIsCreateOpen] = useState(false)
+    const [isSubmitOpen, setIsSubmitOpen] = useState(false)
+    const [isAcceptOpen, setIsAcceptOpen] = useState(false)
+    const [isDisplayOpen, setIsDisplayOpen] = useState(false)
 
-function Home() {
-    const [isCreateOpen, setIsCreateOpen] = React.useState(false)
-    const [isSubmitOpen, setIsSubmitOpen] = React.useState(false)
-    const [isAcceptOpen, setIsAcceptOpen] = React.useState(false)
+    // setting the necessary contexts
+    const [user, setUser] = useContext(UserContext)
+    const [company, setCompany] = useContext(CompanyContext)
+
+    // Initializing database and data states
+    const db = props.db
+    const [taskData, setTaskData] = useContext(TaskDataContext)
+    const [task, setTask] = useState({
+        id: "",
+        companyName: "",
+        description: "",
+        email: "",
+        estDate: "",
+        name: "",
+        status: "",
+        submission: ""
+    })
 
     const openCreate = () => setIsCreateOpen(true);
     const closeCreate = () => setIsCreateOpen(false);
 
-    const openSubmit = () => setIsSubmitOpen(true);
+    const openSubmit = (item) => {
+        setTask(item)
+        setIsSubmitOpen(true);
+    };
     const closeSubmit = () => setIsSubmitOpen(false);
 
-    const openAccept = () => setIsAcceptOpen(true);
+    const openAccept = (item) => {
+        setTask(item)
+        setIsAcceptOpen(true);
+    };
     const closeAccept = () => setIsAcceptOpen(false);
 
-    // fetch the collection data for all of the tasks here, similar to parsume
-    // change the text on the button depending on the value of the status parameter: 
-    // { task.status ? <Button>Accept</> : <Button>Submit</>}
-    // ^ Probs gonna run into more difficulties later on with this
+    const openDisplay = (item) => {
+        setTask(item)
+        setIsDisplayOpen(true);
+    };
+    const closeDisplay = () => setIsDisplayOpen(false);
 
-    // Try to figure out a better way to deal with overflow in the description cell
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const snapshot = await getDocs(collection(db, 'tasks'));
+            const fetchedData = snapshot.docs.map(doc => {
+                return { id: doc.id, ...doc.data() };
+            });
+            setTaskData(fetchedData)
+        }
+        fetchData();
+    }, []);
+
 
     return (
         <div className="home-layout">
-            <Button className='home-upload' colorScheme='blue' onClick={openCreate}>Upload New Task</Button>
+            {company ?
+                <Button className='home-upload' colorScheme='blue' onClick={openCreate}>Upload New Task</Button>
+                :
+                <Button className='home-upload' colorScheme='blue' onClick={openCreate} isDisabled >Upload New Task</Button>
+            }
             <TableContainer className="home-table">
                 <Table variant='striped' colorScheme='teal'>
                     <Thead>
@@ -50,47 +96,78 @@ function Home() {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        <Tr>
-                            <Td>Headstarter</Td>
-                            <Td style={{ maxWidth: "25px" }}>Project #2</Td>
-                            <Td>Create a tech incubator webpage</Td>
-                            <Td>
-                                <Button colorScheme='blue' onClick={openAccept}>Accept</Button>
-                            </Td>
-                        </Tr>
-                        <Tr>
-                            <Td>Google</Td>
-                            <Td style={{ maxWidth: "25px" }}>Hire Matthew Chun</Td>
-                            <Td style={{ maxWidth: "100px", overflowX: "auto" }}>
-                                Sit nulla est ex deserunt exercitation anim occaecat. Nostrud ullamco deserunt aute id consequat veniam incididunt duis in sint irure nisi. Mollit officia cillum Lorem ullamco minim nostrud elit officia tempor esse quis.
-                            </Td>
-                            <Td>
-                                <Button colorScheme='blue' onClick={openSubmit}>Submit</Button>
-                            </Td>
-                        </Tr>
-                        <Tr>
-                            <Td>Twitter</Td>
-                            <Td style={{ maxWidth: "25px" }}>Fire Elon</Td>
-                            <Td>Please help us hire a new CEO for our company</Td>
-                            <Td>
-                                <Button colorScheme='blue'>Accept</Button>
-                            </Td>
-                        </Tr>
+                        {company ?
+                            taskData.filter((item) => {
+                                if (item.companyName == company) {
+                                    return item
+                                }
+                            }).map(item => (
+                                <Tr>
+                                    <Td style={{ width: "5%" }}>{item.companyName}</Td>
+                                    <Td style={{ width: "10%" }}>{item.name}</Td>
+                                    <Td style={{ width: "70%", overflowX: "auto" }}>{item.description}</Td>
+                                    <Td key={item} style={{ width: "15%" }}>
+                                        <Button colorScheme='green' onClick={() => openDisplay(item)}>Details</Button>
+                                    </Td>
+                                </Tr>
+                            ))
+                            :
+                            taskData.filter((item) => {
+                                if (item.status != "completed" && item.email == user.email) {
+                                    return item
+                                }
+                            }).map(item => (
+                                <Tr>
+                                    <Td style={{ width: "5%" }}>{item.companyName}</Td>
+                                    <Td style={{ width: "10%" }}>{item.name}</Td>
+                                    <Td style={{ width: "70%", overflowX: "auto" }}>{item.description}</Td>
+                                    <Td key={item} style={{ width: "15%" }}>
+                                        <Button colorScheme='green' onClick={() => openSubmit(item)}>Submit</Button>
+                                    </Td>
+                                </Tr>
+                            ))}
+                        {company ?
+                            null
+                            :
+                            taskData.filter((item) => {
+                                if (item.status != "completed" && item.email == "") {
+                                    return item
+                                }
+                            }).map(item => (
+                                <Tr>
+                                    <Td style={{ width: "5%" }}>{item.companyName}</Td>
+                                    <Td style={{ width: "10%" }}>{item.name}</Td>
+                                    <Td style={{ width: "70%", overflowX: "auto" }}>{item.description}</Td>
+                                    <Td key={item} style={{ width: "15%" }}>
+                                        <Button colorScheme='blue' onClick={() => openAccept(item)}>Accept</Button>
+                                    </Td>
+                                </Tr>
+                            ))}
                     </Tbody>
                 </Table>
             </TableContainer>
             <Create
                 isOpen={isCreateOpen}
                 onClose={closeCreate}
+                db={db}
             ></Create>
             <Accept
                 isOpen={isAcceptOpen}
                 onClose={closeAccept}
+                item={task}
+                db={db}
             ></Accept>
             <Submit
                 isOpen={isSubmitOpen}
                 onClose={closeSubmit}
+                item={task}
+                db={db}
             ></Submit>
+            <Display
+                isOpen={isDisplayOpen}
+                onClose={closeDisplay}
+                item={task}
+            ></Display>
         </div>
     );
 }
