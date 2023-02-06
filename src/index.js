@@ -5,17 +5,20 @@ import App from './App';
 import { ChakraProvider } from '@chakra-ui/react';
 import { TaskDataProvider } from './contexts/TaskData';
 import { UserProvider } from './contexts/User';
+import { CompanyProvider } from './contexts/Company';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ChakraProvider>
     <UserProvider>
-    <TaskDataProvider>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    </TaskDataProvider>
+      <CompanyProvider>
+        <TaskDataProvider>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </TaskDataProvider>
+      </CompanyProvider>
     </UserProvider>
   </ChakraProvider>
 );

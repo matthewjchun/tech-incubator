@@ -10,18 +10,23 @@ import {
   FormControl,
   Button,
   FormLabel,
-  Input
-
+  Input,
+  RadioGroup,
+  Radio,
+  Stack,
 } from '@chakra-ui/react'
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { UserContext } from "../../contexts/User";
+import { CompanyContext } from "../../contexts/Company";
 
 
 function Login(props) {
   const { isOpen, onClose, auth } = props
+  const [accType, setAccType] = useState('1')
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useContext(UserContext)
+  const [company, setCompany] = useContext(CompanyContext)
 
   const initialRef = React.useRef(null)
 
@@ -49,7 +54,20 @@ function Login(props) {
           <ModalHeader>Login</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-
+            <RadioGroup onChange={setAccType} value={accType}>
+              <Stack direction='row'>
+                <Radio value='1'>Student</Radio>
+                <Radio value='2'>Company</Radio>
+              </Stack>
+            </RadioGroup>
+            {accType == "2" ?
+              <FormControl mt={4}>
+                <FormLabel>Company</FormLabel>
+                <Input placeholder='Company' value={company} onChange={e => setCompany(e.target.value)} />
+              </FormControl>
+              :
+              null
+            }
             <FormControl mt={4}>
               <FormLabel>Email</FormLabel>
               <Input placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} />

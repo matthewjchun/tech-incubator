@@ -10,7 +10,7 @@ import { UserContext } from './contexts/User';
 
 
 function App() {
-  const [user, setUser] = useContext(UserContext)
+  const [ user, setUser ] = useContext(UserContext)
 
   const firebaseConfig = {
     apiKey: "AIzaSyBRtmfr_5Z5XkfvuPltYw-40o0LphTk6fU",

@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { doc, getDocs, addDoc, collection } from "firebase/firestore";
 import { TaskDataContext } from '../../contexts/TaskData';
+import { CompanyContext } from '../../contexts/Company';
 
 
 function Create(props) {
@@ -24,13 +25,15 @@ function Create(props) {
     // Use context in order to force table to rerender upon writing to database
     const [ taskData, setTaskData ] = useContext(TaskDataContext)
 
+    const [ company, setCompany ] = useContext(CompanyContext)
+
     // create state variables for the task information
     const [name, setName] = useState("")
     const [desc, setDesc] = useState("")
 
     const handleAddTask = async () => {
         var taskData = {
-            companyName: "Google",
+            companyName: company,
             description: desc,
             email: "",
             estDate: "",

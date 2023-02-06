@@ -17,19 +17,31 @@ import {
 } from '@chakra-ui/react'
 import { createUserWithEmailAndPassword } from '@firebase/auth'
 import { UserContext } from '../../contexts/User'
+import { CompanyContext } from '../../contexts/Company'
 
 function Register(props) {
   const { isOpen, onClose, auth } = props
   const [accType, setAccType] = useState('1')
+  const [name, setName] = useState("")
+  const [companyName, setCompanyName] = useState("")
+  const [companyURL, setCompanyURL] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [ user, setUser ] = useContext(UserContext)
+  const [ company, setCompany ] = useContext(CompanyContext)
 
   const initialRef = React.useRef(null)
-  
+
   const registerAcc = async () => {
     await createUserWithEmailAndPassword(auth, email, password)
     setUser(auth.currentUser)
+    onClose()
+  }
+
+  const registerCompanyAcc = async () => {
+    await createUserWithEmailAndPassword(auth, email, password)
+    setUser(auth.currentUser)
+    setCompany(companyName)
     onClose()
   }
 
@@ -54,55 +66,57 @@ function Register(props) {
             </RadioGroup>
             {accType == '1' ?
               <>
-                {/* <FormControl>
-                  <FormLabel>First name</FormLabel>
-                  <Input ref={initialRef} placeholder='First name' />
+                <FormControl>
+                  <FormLabel>Full name</FormLabel>
+                  <Input ref={initialRef} placeholder='Full name' value={name} onChange={e => setName(e.target.value)}  />
                 </FormControl>
 
                 <FormControl mt={4}>
-                  <FormLabel>Last name</FormLabel>
-                  <Input placeholder='Last name' />
-                </FormControl> */}
-
-                <FormControl mt={4}>
                   <FormLabel>Email</FormLabel>
-                  <Input placeholder='Email' value={email} onChange={e => setEmail(e.target.value)}/>
+                  <Input placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} />
                 </FormControl>
 
                 <FormControl mt={4}>
                   <FormLabel>Password</FormLabel>
-                  <Input type="password" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)}/>
+                  <Input type="password" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} />
                 </FormControl>
               </>
               :
               <>
                 <FormControl>
                   <FormLabel>Company name</FormLabel>
-                  <Input ref={initialRef} placeholder='Company name' />
+                  <Input ref={initialRef} placeholder='Company name' value={companyName} onChange={e => setCompanyName(e.target.value)}  />
                 </FormControl>
 
                 <FormControl mt={4}>
                   <FormLabel>Email</FormLabel>
-                  <Input placeholder='Email' value={email} onChange={e => setEmail(e.target.value)}/>
+                  <Input placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} />
                 </FormControl>
 
                 <FormControl mt={4}>
                   <FormLabel>Password</FormLabel>
-                  <Input type="password" placeholder='Password' />
+                  <Input type="password" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} />
                 </FormControl>
 
                 <FormControl mt={4}>
                   <FormLabel>Logo</FormLabel>
-                  <Input placeholder='Logo url' />
+                  <Input placeholder='Logo url' value={companyURL} onChange={e => setCompanyURL(e.target.value)}/>
                 </FormControl>
               </>
             }
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={registerAcc}>
-              Register
-            </Button>
+            {accType == "1" ?
+              <Button colorScheme='blue' mr={3} onClick={registerAcc}>
+                Register
+              </Button>
+              :
+              <Button colorScheme='blue' mr={3} onClick={registerCompanyAcc}>
+                Register
+              </Button>
+            }
+
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>

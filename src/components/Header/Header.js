@@ -6,11 +6,13 @@ import Register from '../Modals/Register'
 import Login from '../Modals/Login'
 import { UserContext } from '../../contexts/User';
 import { signOut } from "firebase/auth";
+import { CompanyContext } from '../../contexts/Company';
 
 function Header(props) {
   const { auth, db } = props
 
-  const [user, setUser] = useContext(UserContext)
+  const [ user, setUser ] = useContext(UserContext)
+  const [ company, setCompany ] = useContext(CompanyContext)
 
   const [isResgisterOpen, setIsRegisterOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
@@ -27,6 +29,7 @@ function Header(props) {
   const signUserOut = () => {
     signOut(auth).then(() => {
       setUser(null)
+      setCompany(null)
       console.log("sign out successful")
     }).catch((error) => {
       console.log("error: ", error)
